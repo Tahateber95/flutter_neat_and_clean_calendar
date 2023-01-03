@@ -31,6 +31,7 @@ class NeatCleanCalendarTile extends StatelessWidget {
   final VoidCallback? onDateSelected;
   final DateTime? date;
   final String? dayOfWeek;
+  final bool showDayOfWeek;
   final bool isDayOfWeek;
   final bool isSelected;
   final bool inMonth;
@@ -64,25 +65,28 @@ class NeatCleanCalendarTile extends StatelessWidget {
     this.todayColor,
     this.eventColor,
     this.eventDoneColor,
+    this.showDayOfWeek = false,
   });
 
   /// This function [renderDateOrDayOfWeek] renders the week view or the month view. It is
   /// responsible for displaying a calendar tile. This can be a day (i.e. "Mon", "Tue" ...) in
   /// the header row or a date tile for each day of a week or a month. The property [isDayOfWeek]
   /// of the [NeatCleanCalendarTile] decides, if the rendered item should be a day or a date tile.
-  Widget renderDateOrDayOfWeek(BuildContext context) {
+  Widget? renderDateOrDayOfWeek(BuildContext context) {
     // We decide, if this calendar tile should display a day name in the header row. If this is the
     // case, we return a widget, that contains a text widget with style property [dayOfWeekStyle]
     if (isDayOfWeek) {
-      return new GestureDetector(
-        child: new Container(
-          alignment: Alignment.center,
-          child: Text(
-            dayOfWeek ?? '',
-            style: dayOfWeekStyle,
-          ),
-        ),
-      );
+      return showDayOfWeek
+          ? GestureDetector(
+              child: Container(
+                alignment: Alignment.center,
+                child: Text(
+                  dayOfWeek ?? '',
+                  style: dayOfWeekStyle,
+                ),
+              ),
+            )
+          : null;
     } else {
       // Here the date tiles get rendered. Initially eventCount is set to 0.
       // Every date tile can show up to three dots representing an event.
